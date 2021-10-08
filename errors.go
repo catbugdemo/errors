@@ -101,7 +101,7 @@ import (
 // New also records the stack trace at the point it was called.
 func New(message string) error {
 	return &fundamental{
-		msg:   message,
+		msg:    message,
 		stack: callers(),
 	}
 }
@@ -146,6 +146,9 @@ func WithStack(err error) error {
 	if err == nil {
 		return nil
 	}
+	if _, ok := err.(*withStack); ok {
+		return err
+	}
 	return &withStack{
 		err,
 		callers(),
@@ -185,9 +188,12 @@ func Wrap(err error, message string) error {
 	if err == nil {
 		return nil
 	}
+	if _, ok := err.(*withStack); ok {
+		return err
+	}
 	err = &withMessage{
 		cause: err,
-		msg:   message,
+		msg:    message,
 	}
 	return &withStack{
 		err,
@@ -201,6 +207,9 @@ func Wrap(err error, message string) error {
 func Wrapf(err error, format string, args ...interface{}) error {
 	if err == nil {
 		return nil
+	}
+	if _, ok := err.(*withStack); ok {
+		return err
 	}
 	err = &withMessage{
 		cause: err,
@@ -220,7 +229,7 @@ func WithMessage(err error, message string) error {
 	}
 	return &withMessage{
 		cause: err,
-		msg:   message,
+		msg:  message,
 	}
 }
 
