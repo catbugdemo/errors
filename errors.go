@@ -146,6 +146,9 @@ func WithStack(err error) error {
 	if err == nil {
 		return nil
 	}
+	if _, ok := err.(*withStack); ok {
+		return err
+	}
 	return &withStack{
 		err,
 		callers(),
@@ -185,6 +188,9 @@ func Wrap(err error, message string) error {
 	if err == nil {
 		return nil
 	}
+	if _, ok := err.(*withStack); ok {
+		return err
+	}
 	err = &withMessage{
 		cause: err,
 		msg:   message,
@@ -201,6 +207,9 @@ func Wrap(err error, message string) error {
 func Wrapf(err error, format string, args ...interface{}) error {
 	if err == nil {
 		return nil
+	}
+	if _, ok := err.(*withStack); ok {
+		return err
 	}
 	err = &withMessage{
 		cause: err,
