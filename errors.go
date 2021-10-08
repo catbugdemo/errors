@@ -101,7 +101,7 @@ import (
 // New also records the stack trace at the point it was called.
 func New(message string) error {
 	return &fundamental{
-		msg:    message,
+		msg:   message,
 		stack: callers(),
 	}
 }
@@ -193,7 +193,7 @@ func Wrap(err error, message string) error {
 	}
 	err = &withMessage{
 		cause: err,
-		msg:    message,
+		msg:   message,
 	}
 	return &withStack{
 		err,
@@ -229,7 +229,7 @@ func WithMessage(err error, message string) error {
 	}
 	return &withMessage{
 		cause: err,
-		msg:  message,
+		msg:   message,
 	}
 }
 
