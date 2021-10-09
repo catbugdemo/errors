@@ -142,12 +142,9 @@ type stack []uintptr
 func (s *stack) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		switch {
-		case st.Flag('+'):
-			for _, pc := range *s {
-				f := Frame(pc)
-				fmt.Fprintf(st, "\n%+v", f)
-			}
+		for _, pc := range *s {
+			f := Frame(pc)
+			fmt.Fprintf(st, "\n%+v", f)
 		}
 	}
 }
